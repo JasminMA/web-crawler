@@ -3,6 +3,8 @@ package com.webcrawler.model;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cr_page_info")
@@ -22,9 +24,12 @@ public class PageInfo {
     @Column(name = "level")
     private int level;
 
-    @ManyToOne
-    @JoinColumn(name = "web_sit_info_id", nullable = false)
-    private WebSiteInfo webSiteInfo;
+    @ManyToOne(cascade={CascadeType.ALL})
+    @JoinColumn(name="parant_page_id")
+    private PageInfo parentPage;
+
+    @OneToMany(mappedBy="parentPage")
+    private Set<PageInfo> childPages = new HashSet<>();
 
 
 }
