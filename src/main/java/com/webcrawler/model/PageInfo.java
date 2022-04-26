@@ -26,6 +26,9 @@ public class PageInfo {
     @Column(name = "level")
     private int level;
 
+    @Column(name = "url")
+    private String pageURL;
+
     @ManyToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "parant_page_id")
     private PageInfo parentPage;

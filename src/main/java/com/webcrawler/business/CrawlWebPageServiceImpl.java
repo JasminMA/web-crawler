@@ -26,10 +26,15 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
 
         log.info("Current Request is {}", crawlPageRequest);
         Set<String> visited = new HashSet<>();
-        visited.add(crawlPageRequest.getPageUrl());
-        retrievePageURLs(0, crawlPageRequest.getMaxLevel(), crawlPageRequest.getPageUrl(), visited,
-                null);
+        final String pageUrl = crawlPageRequest.getPageUrl();
+        visited.add(pageUrl);
 
+        final long start = System.currentTimeMillis();
+        final int maxLevel = crawlPageRequest.getMaxLevel();
+        retrievePageURLs(0, maxLevel, pageUrl, visited,
+                null);
+        final long end = System.currentTimeMillis();
+        log.info("Crawling WebSite {} to level {} took ms {} s {}", pageUrl, maxLevel, (end - start), (end - start) / 1000);
     }
 
     private PageInfo retrievePageURLs(int currentLevel, final int maxLevel, final String pageUrl, Set<String> visited,
@@ -42,6 +47,7 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
                 pageInfo.setParentPage(parent);
                 pageInfo.setTitle(document.title());
                 pageInfo.setLevel(currentLevel);
+                pageInfo.setPageURL(pageUrl);
                 for (Element e : document.select("a[href]")) {
                     String currentUrl = e.absUrl("href");
                     currentUrl = clearCurrentURL(currentUrl);
