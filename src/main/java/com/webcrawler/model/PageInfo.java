@@ -11,10 +11,11 @@ import java.util.Set;
 @Table(name = "cr_page_info")
 @Setter
 @Getter
+@SequenceGenerator(name="seq", initialValue=1, allocationSize=100)
 public class PageInfo {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy=GenerationType.SEQUENCE, generator="seq")
     private long id;
 
     @Column(name = "title")
