@@ -21,6 +21,8 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
 
     private final PageInfoService pageInfoService;
 
+    private int counter = 0;
+
     @Override
     public void crawlPage(final CrawlPageRequest crawlPageRequest) {
 
@@ -31,8 +33,9 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
 
         final long start = System.currentTimeMillis();
         final int maxLevel = crawlPageRequest.getMaxLevel();
-        retrievePageURLs(0, maxLevel, pageUrl, visited,
+        final PageInfo pageInfo = retrievePageURLs(0, maxLevel, pageUrl, visited,
                 null);
+        pageInfoService.savePageInfo(pageInfo);
         final long end = System.currentTimeMillis();
         log.info("Crawling WebSite {} to level {} took ms {} s {}", pageUrl, maxLevel, (end - start), (end - start) / 1000);
     }
@@ -41,6 +44,7 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
                                       PageInfo parent) {
 
         if (currentLevel <= maxLevel) {
+            log.info("{} - Current level: {} , Page URL: {}", counter++, currentLevel, pageUrl);
             final Document document = getChildPage(pageUrl);
             if (document != null) {
                 PageInfo pageInfo = new PageInfo();
@@ -57,11 +61,10 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
                         pageInfo.addPageInfo(pageInfoSub);
                     }
                 }
-                pageInfoService.savePageInfo(pageInfo);
                 return pageInfo;
             }
         }
-        return null;
+        return parent;
     }
 
     private String clearCurrentURL(final String currentUrl) {
