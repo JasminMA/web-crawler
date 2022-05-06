@@ -35,7 +35,6 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
         final int maxLevel = crawlPageRequest.getMaxLevel();
         final PageInfo pageInfo = retrievePageURLs(0, maxLevel, pageUrl, visited,
                 null);
-        pageInfoService.savePageInfo(pageInfo);
         final long end = System.currentTimeMillis();
         log.info("Crawling WebSite {} to level {} took ms {} s {}", pageUrl, maxLevel, (end - start), (end - start) / 1000);
     }
