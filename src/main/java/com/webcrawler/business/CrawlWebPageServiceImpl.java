@@ -21,7 +21,7 @@ class CrawlWebPageServiceImpl implements CrawlWebPageService {
 
     private final PageInfoService pageInfoService;
 
-    private int counter = 0;
+    private int counter = 1;
 
     @Override
     public void crawlPage(final CrawlPageRequest crawlPageRequest) {
